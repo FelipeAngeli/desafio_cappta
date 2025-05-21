@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../core/utils/pokemon_utils.dart';
 
 class PokemonListItem extends StatelessWidget {
-  final String name;
-  final String url;
+  final String? name;
+  final String? url;
   final VoidCallback onTap;
 
   const PokemonListItem({
@@ -12,23 +13,46 @@ class PokemonListItem extends StatelessWidget {
     required this.onTap,
   });
 
-  String getPokemonImage() {
-    final uri = Uri.parse(url);
-    final segments = uri.pathSegments;
-    final id = segments[segments.length - 2]; // penúltimo segmento: '1'
-    return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
-  }
-
   @override
   Widget build(BuildContext context) {
+    final imageUrl = getPokemonImage(url);
+
     return ListTile(
-      leading: Image.network(
-        getPokemonImage(),
-        width: 50,
-        height: 50,
-        fit: BoxFit.contain,
+      leading: imageUrl.isNotEmpty
+          ? Image.network(
+              imageUrl,
+              width: 50,
+              height: 50,
+              cacheWidth: 100,
+              cacheHeight: 100,
+              fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) => const Icon(
+                Icons.error,
+                size: 40,
+                color: Colors.red,
+              ),
+            )
+          : const Icon(
+              Icons.image_not_supported,
+              size: 40,
+            ),
+      title: Text(
+        name?.toUpperCase() ?? 'Nome desconhecido',
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
       ),
-      title: Text(name.toUpperCase()),
       onTap: onTap,
     );
   }

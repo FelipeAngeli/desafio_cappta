@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../core/network/api_client.dart';
 import '../core/network/interceptors/curllogger_dio_interceptor.dart';
-import '../data/repositories/pokemon_repository.dart';
+import '../data/repository/pokemon_repository.dart';
 
 final getIt = GetIt.instance;
 

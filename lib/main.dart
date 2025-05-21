@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'di/service_locator.dart';
-import 'view/screen/pokemon_list_screen.dart';
+import 'view/screens/pokemon_list_screen.dart';
+import 'view/screens/pokemon_detail_screen.dart';
 
 void main() {
   setupLocator();
@@ -16,13 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Pokédex',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.green,
       ),
       home: const PokemonListScreen(),
       routes: {
-        '/details': (context) => const Placeholder(), // Ajustar depois
+        '/details': (context) => const PokemonDetailScreen(),
       },
     );
   }

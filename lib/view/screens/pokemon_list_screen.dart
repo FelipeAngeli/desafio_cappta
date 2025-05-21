@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../viewmodel/pokemon_viewmodel.dart';
+import '../witgets/pokemon_app_bar.dart';
+import '../witgets/pokemon_card_container.dart';
 import '../witgets/pokemon_list_item.dart';
 
 class PokemonListScreen extends ConsumerWidget {
@@ -12,24 +14,24 @@ class PokemonListScreen extends ConsumerWidget {
     final pokemonState = ref.watch(pokemonViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pokédex'),
-      ),
+      appBar: const PokemonAppBar(title: 'Pokédex'),
       body: pokemonState.when(
         data: (pokemons) => ListView.builder(
           itemCount: pokemons.length,
           itemBuilder: (context, index) {
             final pokemon = pokemons[index];
-            return PokemonListItem(
-              name: pokemon.name,
-              url: pokemon.url,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/details',
-                  arguments: pokemon,
-                );
-              },
+            return PokemonCardContainer(
+              child: PokemonListItem(
+                name: pokemon.name,
+                url: pokemon.url,
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/details',
+                    arguments: pokemon,
+                  );
+                },
+              ),
             );
           },
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/models/pokemon_model.dart';
-import '../data/repositories/pokemon_repository.dart';
+import '../data/repository/pokemon_repository.dart';
 import '../di/service_locator.dart';
 
 final pokemonViewModelProvider =
