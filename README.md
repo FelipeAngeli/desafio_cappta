@@ -2,6 +2,10 @@
 
 Uma aplicação Flutter moderna para explorar o mundo dos Pokémon, utilizando a PokeAPI.
 
+
+https://github.com/user-attachments/assets/1856d329-8e10-442f-ba50-1db81dde9664
+
+
 ## 🚀 Funcionalidades
 
 - Lista completa de Pokémon
