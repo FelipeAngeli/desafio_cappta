@@ -8,9 +8,17 @@ import '../data/repository/pokemon_repository.dart';
 final getIt = GetIt.instance;
 
 void setupLocator() {
-  final dio = Dio(BaseOptions(
-    baseUrl: 'https://pokeapi.co/api/v2/',
-  ));
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: 'https://pokeapi.co/api/v2/',
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      sendTimeout: const Duration(seconds: 10),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ),
+  );
 
   dio.interceptors.add(CurlLoggerDioInterceptor(
     1,
