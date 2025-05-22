@@ -25,6 +25,17 @@ void main() {
   });
 
   group('PokemonDetailViewModel', () {
+    test('deve iniciar no estado de loading', () async {
+      // Arrange
+      const pokemonUrl = 'pokemon/1/';
+
+      // Act
+      final detailAsync = container.read(pokemonDetailProvider(pokemonUrl));
+
+      // Assert
+      expect(detailAsync, isA<AsyncLoading>());
+    });
+
     test('deve carregar detalhes do pokémon com sucesso', () async {
       // Arrange
       const pokemonUrl = 'pokemon/1/';
@@ -48,6 +59,42 @@ void main() {
       // Act & Assert
       expect(
         () => repository.fetchPokemonDetail(invalidUrl),
+        throwsException,
+      );
+    });
+
+    test('deve lidar com timeout na requisição', () async {
+      // Arrange
+      const pokemonUrl = 'pokemon/1/';
+      final timeoutDio = Dio(BaseOptions(
+        baseUrl: 'https://pokeapi.co/api/v2/',
+        connectTimeout: const Duration(milliseconds: 1),
+        receiveTimeout: const Duration(milliseconds: 1),
+      ));
+
+      final timeoutApiClient = ApiClient(timeoutDio);
+      final timeoutRepository = PokemonRepository(timeoutApiClient);
+
+      // Act & Assert
+      expect(
+        () => timeoutRepository.fetchPokemonDetail(pokemonUrl),
+        throwsException,
+      );
+    });
+
+    test('deve lidar com erro de conexão', () async {
+      // Arrange
+      const pokemonUrl = 'pokemon/1/';
+      final offlineDio = Dio(BaseOptions(
+        baseUrl: 'https://invalid-url-that-does-not-exist.com/',
+      ));
+
+      final offlineApiClient = ApiClient(offlineDio);
+      final offlineRepository = PokemonRepository(offlineApiClient);
+
+      // Act & Assert
+      expect(
+        () => offlineRepository.fetchPokemonDetail(pokemonUrl),
         throwsException,
       );
     });
