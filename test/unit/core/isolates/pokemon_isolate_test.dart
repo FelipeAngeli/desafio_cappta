@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:desafio_cappta/core/utils/pokemon_isolate.dart';
+import 'package:desafio_cappta/core/isolates/pokemon_isolate.dart';
 import 'package:desafio_cappta/data/models/pokemon_model.dart';
 
 void main() {

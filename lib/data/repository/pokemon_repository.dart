@@ -1,8 +1,8 @@
 import '../../core/network/api_client.dart';
 import '../models/pokemon_model.dart';
 import '../models/pokemon_detail_model.dart';
-import '../../core/utils/pokemon_isolate.dart';
-import '../../core/utils/pokemon_detail_isolate.dart'; // ✅ Novo import
+import '../../core/isolates/pokemon_isolate.dart';
+import '../../core/isolates/pokemon_detail_isolate.dart'; // ✅ Novo import
 
 class PokemonRepository {
   final ApiClient apiClient;
