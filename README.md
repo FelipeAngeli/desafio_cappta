@@ -10,6 +10,35 @@ Uma aplicação Flutter moderna para explorar o mundo dos Pokémon, utilizando a
 - Processamento assíncrono com Isolates
 - Arquitetura limpa e organizada
 
+## 📁 Estrutura do Projeto
+
+```
+lib/
+├── core/
+│   ├── app/
+│   │   └── app_widget.dart      # Widget principal da aplicação
+│   ├── routes/
+│   │   └── app_routes.dart      # Gerenciamento de rotas
+│   ├── theme/
+│   │   └── app_theme.dart       # Configuração do tema
+│   └── network/
+│       └── api_client.dart      # Cliente HTTP
+├── data/
+│   ├── models/
+│   └── repository/
+├── di/
+│   └── service_locator.dart     # Injeção de dependência
+├── view/
+│   └── screens/
+└── viewmodel/
+```
+
+### Core
+- **App**: Contém o widget principal da aplicação
+- **Routes**: Gerenciamento centralizado de rotas
+- **Theme**: Configuração do tema e estilos
+- **Network**: Configurações de rede e API
+
 ## 🔄 Isolates
 
 O projeto implementa Isolates do Dart para otimizar o processamento de dados pesados:
@@ -29,6 +58,32 @@ O projeto implementa Isolates do Dart para otimizar o processamento de dados pes
 - Interface do usuário sempre responsiva
 - Melhor performance em dispositivos de baixo desempenho
 - Redução do uso de memória na thread principal
+
+## 🎨 Tema e Estilos
+
+O projeto utiliza uma estrutura organizada para gerenciamento de tema:
+
+### AppTheme
+- Configuração centralizada do tema
+- Suporte ao Material 3
+- Estilos personalizados para componentes
+- Tema consistente em toda a aplicação
+
+### Componentes Estilizados
+- AppBar com título centralizado
+- Cards com bordas arredondadas
+- Elevação e sombras consistentes
+- Cores e tipografia padronizadas
+
+## 🛣️ Gerenciamento de Rotas
+
+Sistema de rotas organizado e centralizado:
+
+### AppRoutes
+- Constantes para nomes de rotas
+- Mapa de rotas centralizado
+- Fácil adição de novas rotas
+- Navegação tipada e segura
 
 ## 🏗️ Arquitetura MVVM
 
@@ -107,6 +162,9 @@ O projeto possui uma cobertura abrangente de testes, seguindo as melhores práti
 test/
 └── unit/
     ├── core/
+    │   ├── app/
+    │   ├── routes/
+    │   ├── theme/
     │   └── network/
     │       └── api_client_test.dart
     └── data/
