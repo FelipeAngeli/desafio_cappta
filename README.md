@@ -1,164 +1,166 @@
 # Pokédex Flutter
 
-![Flutter](https://img.shields.io/badge/Flutter-2.0.0-blue)
-![Dart](https://img.shields.io/badge/Dart-2.12.0-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+Uma aplicação Flutter moderna para explorar o mundo dos Pokémon, utilizando a PokeAPI.
 
-Uma aplicação Flutter moderna que consome a [PokéAPI](https://pokeapi.co/) para exibir informações sobre Pokémon. O projeto foi desenvolvido seguindo as melhores práticas de arquitetura e desenvolvimento.
+## 🚀 Funcionalidades
 
-## 🎯 Objetivos
+- Lista completa de Pokémon
+- Detalhes detalhados de cada Pokémon
+- Interface moderna e responsiva
+- Processamento assíncrono com Isolates
+- Arquitetura limpa e organizada
 
-- Demonstrar a implementação de uma arquitetura MVVM (Model-View-ViewModel) em Flutter
-- Utilizar gerenciamento de estado com Riverpod
-- Implementar injeção de dependência
-- Seguir princípios SOLID e Clean Code
-- Criar uma interface de usuário moderna e responsiva
+## 🔄 Isolates
 
-## 🏗️ Arquitetura
+O projeto implementa Isolates do Dart para otimizar o processamento de dados pesados:
 
-### MVVM (Model-View-ViewModel)
+### PokemonIsolate
+- Processa a lista de Pokémon em uma thread separada
+- Converte os dados brutos da API em objetos `PokemonModel`
+- Evita bloqueio da UI durante o processamento da lista
 
-A arquitetura MVVM foi escolhida pelos seguintes motivos:
+### PokemonDetailIsolate
+- Processa os detalhes de um Pokémon específico
+- Converte dados complexos em `PokemonDetailModel`
+- Gerencia o parsing de tipos, habilidades e estatísticas
 
-- **Separação de Responsabilidades**: Cada camada tem uma responsabilidade bem definida
-- **Testabilidade**: Facilita a escrita de testes unitários
-- **Manutenibilidade**: Código mais organizado e fácil de manter
-- **Reutilização**: Componentes podem ser reutilizados em diferentes partes do app
+### Benefícios da Implementação
+- Processamento paralelo de dados
+- Interface do usuário sempre responsiva
+- Melhor performance em dispositivos de baixo desempenho
+- Redução do uso de memória na thread principal
 
-#### Camadas:
+## 🏗️ Arquitetura MVVM
 
-1. **Model**
-   - Representa os dados e a lógica de negócios
-   - Classes: `PokemonModel`, `PokemonDetailModel`
-   - Responsável por mapear os dados da API
+O projeto segue o padrão de arquitetura MVVM (Model-View-ViewModel) com Clean Code:
 
-2. **View**
-   - Interface do usuário
-   - Screens: `PokemonListScreen`, `PokemonDetailScreen`
-   - Widgets reutilizáveis: `PokemonCardContainer`, `PokemonAppBar`
-   - Responsável pela apresentação
+### Model
+- `PokemonModel`: Representa os dados básicos do Pokémon
+- `PokemonDetailModel`: Contém informações detalhadas do Pokémon
+- Responsável pela estrutura e validação dos dados
 
-3. **ViewModel**
-   - Gerencia o estado e a lógica de apresentação
-   - Classes: `PokemonViewModel`, `PokemonDetailViewModel`
-   - Responsável por transformar dados do Model para a View
+### View
+- `PokemonListScreen`: Exibe a lista de Pokémon
+- `PokemonDetailScreen`: Mostra detalhes de um Pokémon específico
+- Componentes reutilizáveis e widgets personalizados
+- Interface moderna e responsiva
+
+### ViewModel
+- `PokemonViewModel`: Gerencia o estado da lista de Pokémon
+- `PokemonDetailViewModel`: Controla o estado dos detalhes
+- Utiliza Riverpod para gerenciamento de estado
+- Separação clara entre lógica de negócio e UI
 
 ## 📦 Pacotes Utilizados
 
 ### Gerenciamento de Estado
-- **flutter_riverpod**: Escolhido por ser uma solução moderna e type-safe para gerenciamento de estado
-  - Facilita o teste de componentes
-  - Permite injeção de dependência
-  - Suporte a estados assíncronos
+- **flutter_riverpod (^2.6.1)**
+  - Gerenciamento de estado reativo
+  - Injeção de dependência
+  - Testabilidade
 
 ### Injeção de Dependência
-- **get_it**: Utilizado para injeção de dependência
-  - Simples e eficiente
-  - Não requer anotações
-  - Fácil de testar
+- **get_it (^8.0.3)**
+  - Service locator para injeção de dependência
+  - Registro de serviços singleton
+  - Fácil mock para testes
 
 ### Networking
-- **dio**: Cliente HTTP robusto
-  - Suporte a interceptors
+- **dio (^5.8.0+1)**
+  - Cliente HTTP robusto
+  - Interceptors para logging
   - Tratamento de erros
-  - Tipagem forte
 
-## 🎨 Interface do Usuário
-
-### Componentes Principais
-
-1. **PokemonListScreen**
-   - Lista de Pokémon com scroll infinito
-   - Cards com informações básicas
-   - Navegação para detalhes
-
-2. **PokemonDetailScreen**
-   - Detalhes completos do Pokémon
-   - Imagem do Pokémon
-   - Informações como altura, peso e tipos
-
-### Widgets Reutilizáveis
-
-1. **PokemonCardContainer**
-   - Card estilizado para exibição de Pokémon
-   - Animações suaves
-   - Design responsivo
-
-2. **PokemonAppBar**
-   - Barra de navegação personalizada
-   - Título dinâmico
-   - Estilo consistente
+### UI
+- **flutter (SDK)**
+  - Framework principal
+  - Widgets Material Design
+  - Animações e transições
 
 ## 🧪 Testes
 
-O projeto inclui testes unitários abrangentes:
+O projeto possui uma cobertura abrangente de testes, seguindo as melhores práticas de TDD:
 
-- Testes de Models
-- Testes de ViewModels
-- Testes de Repository
-- Testes de integração com a API
+### Testes Unitários
+- **ApiClient**
+  - Testes de requisições HTTP bem-sucedidas
+  - Testes de tratamento de erros
+  - Testes de timeout
 
-## 🚀 Como Executar
+- **PokemonRepository**
+  - Testes de busca da lista de Pokémon
+  - Testes de busca de detalhes
+  - Testes de tratamento de erros
 
-1. Clone o repositório
+- **ViewModels**
+  - Testes de gerenciamento de estado
+  - Testes de carregamento de dados
+  - Testes de tratamento de erros
+
+### Testes de Integração
+- Testes de comunicação com a API real
+- Testes de parsing de dados
+- Testes de fluxo completo
+
+### Estrutura de Testes
+```
+test/
+└── unit/
+    ├── core/
+    │   └── network/
+    │       └── api_client_test.dart
+    └── data/
+        └── repository/
+            └── pokemon_repository_test.dart
+```
+
+### Executando os Testes
+```bash
+# Executar todos os testes
+flutter test
+
+# Executar testes com cobertura
+flutter test --coverage
+
+# Executar testes específicos
+flutter test test/unit/core/network/api_client_test.dart
+```
+
+## 📦 Instalação
+
+1. Clone o repositório:
 ```bash
 git clone https://github.com/seu-usuario/pokedex-flutter.git
 ```
 
-2. Instale as dependências
+2. Instale as dependências:
 ```bash
 flutter pub get
 ```
 
-3. Execute o app
+3. Execute o projeto:
 ```bash
 flutter run
 ```
 
-## 📱 Funcionalidades
+## 📱 Screenshots
 
-- Lista de Pokémon com paginação
-- Detalhes completos de cada Pokémon
-- Interface responsiva
-- Tratamento de erros
-- Loading states
-- Cache de imagens
+[Adicione screenshots da aplicação aqui]
 
-## 🛠️ Estrutura de Diretórios
-
-```
-lib/
-├── core/
-│   ├── network/
-│   └── utils/
-├── data/
-│   ├── models/
-│   └── repository/
-├── di/
-├── view/
-│   ├── screens/
-│   └── widgets/
-└── viewmodel/
-```
-
-## 🤝 Contribuindo
+## 🤝 Contribuição
 
 1. Faça um Fork do projeto
 2. Crie uma Branch para sua Feature (`git checkout -b feature/AmazingFeature`)
-3. Faça o Commit das suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Faça o Push para a Branch (`git push origin feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a Branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 👨‍💻 Autor
+## ✨ Agradecimentos
 
-Seu Nome - [@felipeangeli](https://github.com/seu-usuario)
-
-## 🙏 Agradecimentos
-
-- [PokéAPI](https://pokeapi.co/) pela API gratuita
-- Comunidade Flutter pelo suporte
-- Todos os contribuidores do projeto
+- [PokeAPI](https://pokeapi.co/) - API de Pokémon
+- [Flutter](https://flutter.dev/) - Framework
+- [Dart](https://dart.dev/) - Linguagem

@@ -9,15 +9,20 @@ final pokemonViewModelProvider =
 );
 
 class PokemonViewModel extends StateNotifier<AsyncValue<List<PokemonModel>>> {
-  final PokemonRepository repository;
+  final PokemonRepository _repository;
 
-  PokemonViewModel(this.repository) : super(const AsyncLoading()) {
-    fetchPokemons();
+  PokemonViewModel(this._repository) : super(const AsyncLoading()) {
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await fetchPokemons();
   }
 
   Future<void> fetchPokemons() async {
     try {
-      final pokemons = await repository.fetchAllPokemons();
+      state = const AsyncLoading();
+      final pokemons = await _repository.fetchAllPokemons();
       state = AsyncData(pokemons);
     } catch (e, st) {
       state = AsyncError(e, st);

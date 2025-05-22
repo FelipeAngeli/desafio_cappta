@@ -2,25 +2,24 @@ import '../../core/network/api_client.dart';
 import '../models/pokemon_model.dart';
 import '../models/pokemon_detail_model.dart';
 import '../../core/isolates/pokemon_isolate.dart';
-import '../../core/isolates/pokemon_detail_isolate.dart'; // ✅ Novo import
+import '../../core/isolates/pokemon_detail_isolate.dart';
 
 class PokemonRepository {
-  final ApiClient apiClient;
+  final ApiClient _apiClient;
+  static const _basePath = 'pokemon';
+  static const _maxPokemons = 1300;
 
-  PokemonRepository(this.apiClient);
+  PokemonRepository(this._apiClient);
 
   Future<List<PokemonModel>> fetchAllPokemons() async {
     try {
-      final response = await apiClient.get<Map<String, dynamic>>(
-        'pokemon',
-        queryParameters: {'limit': 1300},
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        _basePath,
+        queryParameters: {'limit': _maxPokemons},
       );
 
-      final List<dynamic> results = response.data?['results'] ?? [];
-
-      final parsedList = await PokemonIsolate.parsePokemonList(results);
-
-      return parsedList;
+      final results = response.data?['results'] as List? ?? [];
+      return await PokemonIsolate.parsePokemonList(results);
     } catch (e) {
       throw Exception('Erro ao buscar pokémons: $e');
     }
@@ -28,7 +27,7 @@ class PokemonRepository {
 
   Future<PokemonDetailModel> fetchPokemonDetail(String url) async {
     try {
-      final response = await apiClient.get<Map<String, dynamic>>(url);
+      final response = await _apiClient.get<Map<String, dynamic>>(url);
       return await PokemonDetailIsolate.parsePokemonDetail(response.data!);
     } catch (e) {
       throw Exception('Erro ao buscar detalhes do Pokémon: $e');

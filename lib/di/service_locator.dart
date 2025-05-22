@@ -8,6 +8,11 @@ import '../data/repository/pokemon_repository.dart';
 final getIt = GetIt.instance;
 
 void setupLocator() {
+  final dio = _setupDio();
+  _setupRepositories(dio);
+}
+
+Dio _setupDio() {
   final dio = Dio(
     BaseOptions(
       baseUrl: 'https://pokeapi.co/api/v2/',
@@ -26,9 +31,12 @@ void setupLocator() {
   ));
 
   getIt.registerLazySingleton<Dio>(() => dio);
+  getIt.registerLazySingleton<ApiClient>(() => ApiClient(dio));
 
-  getIt.registerLazySingleton<ApiClient>(() => ApiClient(getIt<Dio>()));
+  return dio;
+}
 
+void _setupRepositories(Dio dio) {
   getIt.registerLazySingleton<PokemonRepository>(
     () => PokemonRepository(getIt<ApiClient>()),
   );

@@ -1,52 +1,49 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:desafio_cappta/data/repository/pokemon_repository.dart';
-import 'package:desafio_cappta/core/network/api_client.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:desafio_cappta/core/network/api_client.dart';
+import 'package:desafio_cappta/data/repository/pokemon_repository.dart';
+import 'package:desafio_cappta/data/models/pokemon_model.dart';
+import 'package:desafio_cappta/data/models/pokemon_detail_model.dart';
 
 void main() {
   late PokemonRepository repository;
-  late ApiClient apiClient;
-  late Dio dio;
 
   setUp(() {
-    dio = Dio(BaseOptions(
+    final dio = Dio(BaseOptions(
       baseUrl: 'https://pokeapi.co/api/v2/',
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 5),
     ));
-    apiClient = ApiClient(dio);
+    final apiClient = ApiClient(dio);
     repository = PokemonRepository(apiClient);
   });
 
   group('PokemonRepository', () {
-    test('deve buscar lista de pokémons com sucesso', () async {
-      // Act
-      final pokemons = await repository.fetchAllPokemons();
+    test('deve retornar lista de pokémons quando a requisição é bem sucedida',
+        () async {
+      final result = await repository.fetchAllPokemons();
 
-      // Assert
-      expect(pokemons, isNotEmpty);
-      expect(pokemons.first.name, isNotEmpty);
-      expect(pokemons.first.url, isNotEmpty);
+      expect(result, isA<List<PokemonModel>>());
+      expect(result, isNotEmpty);
+      expect(result.first.name, isNotEmpty);
+      expect(result.first.url, isNotEmpty);
     });
 
-    test('deve buscar detalhes do pokémon com sucesso', () async {
-      // Arrange
-      const pokemonUrl = 'pokemon/1/';
+    test('deve retornar detalhes do pokémon quando a requisição é bem sucedida',
+        () async {
+      final result = await repository
+          .fetchPokemonDetail('https://pokeapi.co/api/v2/pokemon/1/');
 
-      // Act
-      final pokemonDetail = await repository.fetchPokemonDetail(pokemonUrl);
-
-      // Assert
-      expect(pokemonDetail.height, isNotNull);
-      expect(pokemonDetail.weight, isNotNull);
-      expect(pokemonDetail.types, isNotEmpty);
+      expect(result, isA<PokemonDetailModel>());
+      expect(result.height, isNotNull);
+      expect(result.weight, isNotNull);
+      expect(result.types, isNotEmpty);
     });
 
-    test('deve lançar exceção ao buscar pokémon com URL inválida', () async {
-      // Arrange
-      const invalidUrl = 'pokemon/invalid/';
-
-      // Act & Assert
+    test('deve lançar exceção quando a URL é inválida', () async {
       expect(
-        () => repository.fetchPokemonDetail(invalidUrl),
+        () => repository
+            .fetchPokemonDetail('https://pokeapi.co/api/v2/pokemon/invalid/'),
         throwsException,
       );
     });
