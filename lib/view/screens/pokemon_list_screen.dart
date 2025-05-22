@@ -6,17 +6,39 @@ import '../witgets/pokemon_app_bar.dart';
 import '../witgets/pokemon_card_container.dart';
 import '../witgets/pokemon_list_item.dart';
 
-class PokemonListScreen extends ConsumerWidget {
+class PokemonListScreen extends ConsumerStatefulWidget {
   const PokemonListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PokemonListScreen> createState() => _PokemonListScreenState();
+}
+
+class _PokemonListScreenState extends ConsumerState<PokemonListScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final pokemonState = ref.watch(pokemonViewModelProvider);
 
     return Scaffold(
       appBar: const PokemonAppBar(title: 'Pokédex'),
       body: pokemonState.when(
         data: (pokemons) => ListView.builder(
+          controller: _scrollController,
           itemCount: pokemons.length,
           itemBuilder: (context, index) {
             final pokemon = pokemons[index];
@@ -37,6 +59,12 @@ class PokemonListScreen extends ConsumerWidget {
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(child: Text('Erro: $error')),
+      ),
+      // Botão flutuante para voltar ao topo
+      floatingActionButton: FloatingActionButton(
+        onPressed: _scrollToTop,
+        child: const Icon(Icons.arrow_upward),
+        tooltip: 'Voltar ao topo',
       ),
     );
   }
